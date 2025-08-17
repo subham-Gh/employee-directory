@@ -1,0 +1,314 @@
+<mvc:View
+    controllerName="com.myorg.employeedirectory.controller.Main"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:gt="sap.ui.table"
+    xmlns:core="sap.ui.core"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:tnt="sap.tnt"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:microchart="sap.suite.ui.microchart"
+    xmlns:commons="sap.suite.ui.commons"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+>
+    <Page
+        id="1"
+        showHeader="false"
+    >
+        <ScrollContainer
+            horizontal="false"
+            vertical="true"
+            height="100%"
+        >
+            <l:BlockLayout
+                background="Default"
+                visible="true"
+                class="sapUiTinyMarginTop"
+                keepFontSize="true"
+            >
+                <l:BlockLayoutRow accentCells="Accent1">
+                    <l:BlockLayoutCell class="chartCard">
+                        <l:VerticalLayout width="100%">
+                            <!-- FilterBar: All Records -->
+                            <fb:FilterBar
+                                clear="onFilterClear"
+                                showFilterConfiguration="false"
+                                search="onFilterSearch"
+                                reset="onReset"
+                                showClearOnFB="true"
+                                filterContainerWidth="15em"
+                            >
+                                <fb:filterGroupItems>
+                                    <!-- Name -->
+                                    <fb:FilterGroupItem
+                                        label="Name"
+                                        visibleInFilterBar="true"
+                                        groupName="A"
+                                        name="Name"
+                                    >
+                                        <fb:control>
+                                            <Input
+                                                placeholder="Search name, role, contact, skills"
+                                                value="{employeeModel>/oFilter/name}"
+                                            />
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <!-- Role -->
+                                    <fb:FilterGroupItem
+                                        label="Role"
+                                        visibleInFilterBar="true"
+                                        groupName="A"
+                                        name="Role"
+                                    >
+                                        <fb:control>
+                                            <Select
+                                                items="{employeeModel>/roles}"
+                                                selectedKey="{employeeModel>/oFilter/roles}"
+                                                change=".onRoleFilter"
+                                                forceSelection="false"
+                                                showSecondaryValues="false"
+                                            >
+                                                <core:Item
+                                                    key="{employeeModel>key}"
+                                                    text="{employeeModel>text}"
+                                                />
+                                            </Select>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <!-- Search email or phone -->
+                                    <fb:FilterGroupItem
+                                        label="Search email or phone"
+                                        visibleInFilterBar="true"
+                                        groupName="A"
+                                        name="Email"
+                                    >
+                                        <fb:control>
+                                            <Input
+                                                placeholder="Search email or phone"
+                                                value="{employeeModel>/oFilter/email}"
+                                            />
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <!-- Skill -->
+                                    <fb:FilterGroupItem
+                                        label="Skill"
+                                        visibleInFilterBar="true"
+                                        groupName="A"
+                                        name="Skill"
+                                    >
+                                        <fb:control>
+                                            <Input
+                                                placeholder="Search by skill"
+                                                value="{employeeModel>/oFilter/skill}"
+                                            />
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                </fb:filterGroupItems>
+                            </fb:FilterBar>
+                        </l:VerticalLayout>
+                        <commons:ChartContainer
+                            id="idTypeOfEmr"
+                            showLegend="true"
+                            showZoom="false"
+                            visible="true"
+                            showFullScreen="true"
+                            showPersonalization="false"
+                            autoAdjustHeight="false"
+                            showLegendButton="true"
+                            personalizationPress="attachPersonalizationPress"
+                            contentChange="attachContentChange($event, 'idTypeOfEmrChart')"
+                            title="{i18n>numberOfRecordsByTypeOfEmergency}"
+                        >
+                            <commons:content>
+                                <commons:ChartContainerContent
+                                    icon="sap-icon://full-stacked-column-chart"
+                                    title="Stacked Column Chart"
+                                >
+                                    <commons:content>
+                                        <viz:VizFrame
+                                            id="idEmpChart"
+                                            uiConfig="{applicationSet:'fiori'}"
+                                            vizProperties="{title:{visible:true,text:'Total Employee'},legend:{visible:true,title:{visible:false}},legendGroup:{layout: {position:'bottom',alignment:'center'}} ,plotArea:{window:{start:{valueAxis:null,valueAxis2:null}, end:{valueAxis:null,valueAxis2:null}},background:{visible:false},gridline:{visible:false}, dataLabel :{visible:true}, drawingEffect : 'glossy'}, valueAxis:{title:{visible:true,text:'Experience'}},categoryAxis:{title:{visible:true,text:'Employee Name'}}}"
+                                            height='27em'
+                                            width="100%"
+                                            selectData="selectChartData"
+                                            vizType='column'
+                                        >
+                                            <viz:dataset>
+                                                <viz.data:FlattenedDataset id="idDataTemp"
+                                                    data="{path: 'employeeModel>/employees', sorter: [{path: 'name'}]}"
+                                                >
+                                                    <viz.data:dimensions>
+                                                        <viz.data:DimensionDefinition
+                                                            name="Employee Name"
+                                                            value="{employeeModel>name}"
+                                                        />
+                                                    </viz.data:dimensions>
+                                                    <viz.data:measures>
+                                                        <viz.data:MeasureDefinition
+                                                            name="Experience"
+                                                            value="{employeeModel>experience}"
+                                                        />
+                                                    </viz.data:measures>
+                                                </viz.data:FlattenedDataset>
+                                            </viz:dataset>
+                                            <viz:feeds>
+                                                <viz.feeds:FeedItem
+                                                    uid="valueAxis"
+                                                    type="Measure"
+                                                    values="Experience"
+                                                />
+                                                <viz.feeds:FeedItem
+                                                    uid="categoryAxis"
+                                                    type="Dimension"
+                                                    values="Employee Name"
+                                                />
+                                            </viz:feeds>
+                                        </viz:VizFrame>
+                                    </commons:content>
+                                </commons:ChartContainerContent>
+                                <commons:ChartContainerContent
+                                    icon="sap-icon://table-view"
+                                    title="Table"
+                                >
+                                    <commons:content>
+                                        <gt:Table
+                                            id="idEmpTable"
+                                            rows="{path: 'employeeModel>/employees', sorter: {path: 'name'}}"
+                                            fixedColumnCount="1"
+                                            enableColumnReordering="false"
+                                            enableSelectAll="false"
+                                            selectionMode="None"
+                                        >
+                                            <gt:columns>
+                                                <!-- Employee Name -->
+                                                <gt:Column
+                                                    hAlign="Center"
+                                                    width="16rem"
+                                                >
+                                                    <Label
+                                                        text="Employee Name"
+                                                        design="Bold"
+                                                        wrapping="true"
+                                                    />
+                                                    <gt:template>
+                                                        <ExpandableText
+                                                            text="{employeeModel>name}"
+                                                            class="sapUiTinyMarginBottom sapUiTinyMarginTop"
+                                                            maxCharacters="22"
+                                                            overflowMode="Popover"
+                                                        />
+                                                    </gt:template>
+                                                </gt:Column>
+
+                                                <!-- Role -->
+                                                <gt:Column
+                                                    hAlign="Center"
+                                                    width="16rem"
+                                                >
+                                                    <Label
+                                                        text="Role"
+                                                        design="Bold"
+                                                    />
+                                                    <gt:template>
+                                                        <Text
+                                                            text="{employeeModel>role}"
+                                                        />
+                                                    </gt:template>
+                                                </gt:Column>
+
+                                                <!-- Email -->
+                                                <gt:Column
+                                                    hAlign="Center"
+                                                    width="20rem"
+                                                >
+                                                    <Label
+                                                        text="Email"
+                                                        design="Bold"
+                                                    />
+                                                    <gt:template>
+                                                        <Text
+                                                            text="{employeeModel>email}"
+                                                        />
+                                                    </gt:template>
+                                                </gt:Column>
+
+                                                <!-- Experience -->
+                                                <gt:Column
+                                                    hAlign="Center"
+                                                    width="10rem"
+                                                >
+                                                    <Label
+                                                        text="Experience (Years)"
+                                                        design="Bold"
+                                                    />
+                                                    <gt:template>
+                                                        <Text
+                                                            text="{employeeModel>experience}"
+                                                        />
+                                                    </gt:template>
+                                                </gt:Column>
+
+                                                <!-- Phone -->
+                                                <gt:Column
+                                                    hAlign="Center"
+                                                    width="15rem"
+                                                >
+                                                    <Label
+                                                        text="Phone"
+                                                        design="Bold"
+                                                    />
+                                                    <gt:template>
+                                                        <Text
+                                                            text="{employeeModel>phone}"
+                                                        />
+                                                    </gt:template>
+                                                </gt:Column>
+
+                                                <!-- Skills -->
+                                                <gt:Column
+                                                    hAlign="Center"
+                                                    width="25rem"
+                                                >
+                                                    <Label
+                                                        text="Skills"
+                                                        design="Bold"
+                                                    />
+                                                    <gt:template>
+                                                        <Text
+                                                            text="{employeeModel>skills}"
+                                                        />
+                                                        <!-- If skills are an array, consider using formatter or a custom control -->
+                                                    </gt:template>
+                                                </gt:Column>
+                                            </gt:columns>
+                                        </gt:Table>
+                                    </commons:content>
+                                </commons:ChartContainerContent>
+                            </commons:content>
+                            <commons:customIcons>
+                                <core:Icon
+                                    src="sap-icon://pdf-attachment"
+                                    tooltip="Print"
+                                    press="onPressPrintPdf($event, 'idEmpChart', '/employees', 'Employee Records')"
+                                    visible="{employeeModel>/bPDFButtonFlag}"
+                                />
+                                <core:Icon
+                                    src="sap-icon://excel-attachment"
+                                    tooltip="Export"
+                                    press="onPressExport($event, 'idEmpTable', 'Employee Records')"
+                                    visible="{employeeModel>/bEXPORTButtonFlag}"
+                                />
+                            </commons:customIcons>
+                        </commons:ChartContainer>
+                    </l:BlockLayoutCell>
+                </l:BlockLayoutRow>
+            </l:BlockLayout>
+        </ScrollContainer>
+    </Page>
+</mvc:View>
