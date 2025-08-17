@@ -1,36 +1,34 @@
-## Application Details
-|               |
-| ------------- |
-|**Generation Date and Time**<br>Sun Aug 17 2025 17:22:47 GMT+0000 (Coordinated Universal Time)|
-|**App Generator**<br>SAP Fiori Application Generator|
-|**App Generator Version**<br>1.18.5|
-|**Generation Platform**<br>SAP Business Application Studio|
-|**Template Used**<br>Basic|
-|**Service Type**<br>None|
-|**Service URL**<br>N/A|
-|**Module Name**<br>employee-directory|
-|**Application Title**<br>Employee Directory|
-|**Namespace**<br>com.myorg|
-|**UI5 Theme**<br>sap_horizon|
-|**UI5 Version**<br>1.120.31|
-|**Enable Code Assist Libraries**<br>False|
-|**Enable TypeScript**<br>False|
-|**Add Eslint configuration**<br>False|
+# 👨‍💼 Employee Directory Application (SAPUI5)
 
-## employee-directory
+A responsive Single Page Application built with **SAPUI5**, using JSON Models and XML Views. It provides full control to view and filter employees with smart search, role filtering, and skill insights.
 
-An SAP Fiori application.
+---
 
-### Starting the generated app
+## 🚀 Features
 
--   This app has been generated using the SAP Fiori tools - App Generator, as part of the SAP Fiori tools suite.  To launch the generated application, run the following from the generated application root folder:
+- 🔍 **Global Search** across name, role, contact, and skills
+- 🎯 **Role-based Filtering** using dropdown with key-text mapping
+- 🧑‍🤝‍🧑 **Skill Matching & Filtering** to find collaborators
+- 📧 **Contact Lookup** via phone and email
+- 🧠 **AI-style profile summaries** (UI-driven insights)
+- 📤 Export employee data to CSV (manual or via PapaParse in hybrid app)
+- 📊 Dynamic SAPUI5 Table with:
+  - Expandable name column
+  - Column sorting and data binding
+- 💡 Uses `FilterBar`, `FilterGroupItem`, `Input`, `Select`, `Table`, `JSONModel`
 
-```
-    npm start
-```
+---
 
-#### Pre-requisites:
+## 🧰 Tech Stack
 
-1. Active NodeJS LTS (Long Term Support) version and associated supported NPM version.  (See https://nodejs.org)
+- **SAPUI5 (OpenUI5)** – XML Views, Controllers, JSON Models
+- **UI5 Controls** – `Table`, `FilterBar`, `Select`, `ExpandableText`
+- **JSON Data** – Local employee and role datasets
+- **No build needed** – Pure client-side, ready to run
 
+---
 
+## Screenshots
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
