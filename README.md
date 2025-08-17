@@ -32,3 +32,10 @@ A responsive Single Page Application built with **SAPUI5**, using JSON Models an
 ![alt text](image.png)
 ![alt text](image-1.png)
 ![alt text](image-2.png)
+
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/yourusername/employee-directory-ui5.git
+cd employee-directory-ui5
